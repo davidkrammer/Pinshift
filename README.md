@@ -1,209 +1,70 @@
-<p align="center">
-  <img src="Assets/AppIcon.png" width="160" alt="GeoShift iPhone GPS Simulator app icon">
-</p>
+<p align="center"><img src="App/Resources/Logo.png" width="120" alt="Pinshift logo"></p>
+<h1 align="center">Pinshift</h1>
+<p align="center">Choose a location on your iPhone. Your Mac takes it from there.</p>
 
-<h1 align="center">GeoShift — iPhone GPS Simulator for macOS</h1>
+Pinshift is a free, MIT-licensed fork of [GeoShift](https://github.com/Lemelson/GeoShift), rebuilt with an English-only SwiftUI interface and a native iPhone remote.
 
-<p align="center">
-  Open-source macOS app for persistent Core Location simulation on a physical iPhone over USB or Wi-Fi.
-</p>
+- Search a city, address, landmark, or coordinates, or tap anywhere on the map.
+- Start location simulation and restore real GPS with one button.
+- Control the Mac from an iPhone on the same local Wi-Fi network.
+- Pair using a private QR code; commands and status use authenticated, encrypted TLS.
+- Close the Mac window and keep controlling it through the menu bar and companion.
+- Save favorite places on the Mac. Select the exact target if multiple iPhones are connected.
 
-<p align="center">
-  <a href="https://github.com/Lemelson/GeoShift/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Lemelson/GeoShift/actions/workflows/ci.yml/badge.svg"></a>
-  <img alt="Version 1.5.2" src="https://img.shields.io/badge/version-1.5.2-2563eb">
-  <img alt="macOS 14+" src="https://img.shields.io/badge/macOS-14%2B-black">
-  <img alt="Swift 6.2" src="https://img.shields.io/badge/Swift-6.2-f05138">
-  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-green"></a>
-</p>
+## Get started
 
-<p align="center">
-  <img src="Assets/GeoShiftScreenshot.png" width="760" alt="GeoShift showing a cleared iPhone location simulation, city map, controls, and collapsed diagnostics">
-</p>
+1. Build and open **Pinshift** on your Mac.
+2. Connect the target iPhone to Xcode, trust the Mac, and enable Developer Mode on the phone. Set up Xcode's network connection if you want to unplug USB.
+3. Build and install the **PinshiftRemote** target on your iPhone.
+4. Keep both devices on the same Wi-Fi. On the Mac, click **Pair iPhone remote**; on the iPhone, tap **Scan Mac’s QR code**. Allow Local Network access when asked.
+5. Choose a location on the phone and tap **Start location**. Tap **Stop & restore GPS** when finished.
 
-GeoShift is a native SwiftUI controller for simulating iPhone GPS coordinates
-using Apple's developer location-simulation path through
-[`pymobiledevice3`](https://github.com/doronz88/pymobiledevice3). It is designed
-for iOS development, QA, demos, localization testing, geofencing tests, and
-other authorized location-aware workflows on a physical iPhone.
+The companion sends commands to the Mac. It does not simulate location on its own. The Mac must be awake, Pinshift must remain running, and Xcode must be able to reach the target iPhone. The location worker prevents idle sleep while active; closing a laptop lid still interrupts connectivity.
 
-It provides a searchable catalog of 100+ destinations, automatic reconnect,
-iOS 27 cable-free pairing (verified on the current beta), English and Russian
-interfaces, and a fail-safe
-Restore GPS queue that survives app crashes and temporary phone disconnection.
+## Requirements
 
-> Common searches call this an “iPhone GPS spoofer” or “fake location” tool.
-> GeoShift does not hide what it does: it uses developer location simulation,
-> requires Developer Mode, and is intended for devices you own or are authorized
-> to test. It does not jailbreak the phone or bypass simulation detection.
+- macOS 14 or later; iPhone companion requires iOS 18 or later.
+- Full Xcode with `devicectl device simulate location` support. Development was verified with Xcode 26.6 and a trusted iPhone running iOS 27. Check the command below before installing.
+- A development signing team to install the companion on a physical iPhone. Apple controls the availability, limits, and validity of development provisioning.
+- A local network that permits Bonjour discovery and connections between devices. Guest networks with client isolation may prevent pairing.
 
-## Why GeoShift?
-
-- **Physical iPhone testing:** simulate Core Location outside the iOS Simulator.
-- **USB or Wi-Fi:** trusted USB, legacy Wi-Fi lockdown, and iOS 27 RemotePairing.
-- **No cable on iOS 27:** the beta-tested assistant shows a six-digit pairing code.
-- **Persistent and recoverable:** the worker reconnects after sleep or network loss.
-- **Fail-safe Restore GPS:** exact-device identity, durable status, crash heartbeat,
-  pending clear queue, and startup recovery prevent stale simulated locations.
-- **English and Russian:** English is the first-run default; switch languages in
-  Settings without restarting the app.
-- **Private by design:** no analytics, account, cloud service, or remote server.
-- **Transparent:** open-source SwiftUI controller and Python worker with regression tests.
-
-## What GeoShift changes
-
-GeoShift changes coordinates reported by iOS Core Location while developer
-simulation is active. Maps and other location-aware apps can observe the selected
-coordinates.
-
-GeoShift is **not a VPN** and does not change:
-
-- public IP address or internet country;
-- network route, DNS, ping, bandwidth, or cellular provider;
-- App Store country, timezone, locale, or device language.
-
-Apps may detect simulated coordinates or compare GPS with IP-derived location.
-GeoShift does not attempt to conceal simulation or bypass third-party rules.
-
-## Compatibility
-
-| Requirement | Support |
-| --- | --- |
-| macOS | 14 or newer |
-| Swift | 6.2 or newer |
-| Python | 3.11–3.13; 3.13 recommended |
-| pymobiledevice3 | 9.31.0 |
-| Physical iPhone | iOS 17+ with Developer Mode |
-| Cable-free pairing | iOS 27 RemotePairing; currently beta-tested |
-| iOS Simulator | Not targeted; use Xcode's built-in controls |
-
-See the full [compatibility matrix and known limitations](docs/COMPATIBILITY.md).
-
-## Quick install
-
-Install the backend in an isolated `uv` environment:
-
-```bash
-brew install uv
-uv tool install --python 3.13 'pymobiledevice3==9.31.0'
+```sh
+xcrun devicectl device simulate location --help
 ```
 
-Clone, build, and install GeoShift:
+An App Store installation is not provided. Pinshift has no subscription, license key, or paid service. It does not change GPS hardware, and individual apps may ignore or reject simulated locations; compatibility with Pokémon GO is not guaranteed.
 
-```bash
-git clone https://github.com/Lemelson/GeoShift.git
-cd GeoShift
-./Scripts/install_app.sh
+## Build
+
+Open `Pinshift.xcodeproj` in Xcode. Select your signing team for the iPhone target and change bundle identifiers if needed. Run **Pinshift** on My Mac, and **PinshiftRemote** on your iPhone.
+
+The generated Xcode project is committed, so XcodeGen is only needed when changing `project.yml`:
+
+```sh
+brew install xcodegen
+xcodegen generate
 ```
 
-The script creates an ad-hoc signed `/Applications/GeoShift.app` and opens it.
-Public builds are not currently notarized; see the
-[installation and Gatekeeper guide](docs/INSTALLATION.md).
+Build and install a local Mac app:
 
-## First run
-
-1. Enable **Settings → Privacy & Security → Developer Mode** on the iPhone.
-2. Open GeoShift and choose **Settings → Connection**.
-3. On iOS 27, start the Wi-Fi assistant, then open iPhone
-   **Settings → Developer → Paired Macs → Other Devices → GeoShift**.
-4. Enter the six-digit code shown in GeoShift. This is normally a one-time step.
-5. Alternatively, connect the unlocked iPhone by cable and confirm **Trust**.
-6. Choose a destination and select **Start**.
-
-The pairing permission does not need weekly or monthly renewal. See
-[Pairing an iPhone](docs/PAIRING.md) for the exact flow and renewal conditions.
-
-## Controls and safety behavior
-
-- **Start** installs or wakes the background worker and applies the destination.
-- **Restore GPS** sends a clear through the trusted developer tunnel. If the phone
-  is offline, the request remains pending and completes when that exact phone returns.
-- **Restart** rebuilds the developer tunnel when a connection is stuck.
-- **Reconnect** immediately wakes a sleeping retry.
-- **Choose city** searches English and Russian city, country, and region names.
-- **Settings** controls language, reconnect timing, GPS refresh, and Wi-Fi pairing.
-
-GeoShift writes an application heartbeat every 30 seconds and holds a kernel-owned
-liveness lease for the lifetime of the GUI process. A delayed UI task or App Nap
-cannot be mistaken for a crash: after a stale heartbeat, the worker restores real
-GPS only when it can also prove that the GeoShift process is gone. Command-Q is
-refused when the app cannot confirm either a completed clear or a durable handoff
-to the restore worker.
-
-The UI reports **Simulation cleared** only after the no-reply `clear` command
-returns successfully through the connected iPhone's developer channel. Apple's
-developer API does not read back the physical GPS sensor, so open Maps for the
-final sensor-side check. A missing worker, stale log, or disconnected phone is
-never treated as proof.
-
-Restarting the iPhone clears the current developer location simulation. If
-**Start** is still requested and the worker remains active, GeoShift can reconnect
-and apply it again; choose **Restore GPS** before restarting whenever possible.
-
-## Build and test
-
-```bash
-swift test
-PYTHONDONTWRITEBYTECODE=1 uv run --with 'pymobiledevice3==9.31.0' \
-  python -m unittest discover -s Tests/Python -v
-./Scripts/package_app.sh release
+```sh
+Scripts/install_app.sh
 ```
 
-The package script builds the localized resource bundle, creates `GeoShift.app`,
-and applies an ad-hoc signature.
+This creates a locally signed development build at `/Applications/Pinshift.app`. It is not notarized for public distribution. A distributable release needs your own Developer ID signing and notarization.
 
-## Documentation
+## Development and tests
 
-- [Installation](docs/INSTALLATION.md)
-- [USB and Wi-Fi pairing](docs/PAIRING.md)
-- [Troubleshooting and diagnostics](docs/TROUBLESHOOTING.md)
-- [Compatibility and limitations](docs/COMPATIBILITY.md)
-- [Architecture and fail-safe state machine](docs/ARCHITECTURE.md)
-- [Privacy and local data](docs/PRIVACY.md)
-- [Uninstall and cleanup](docs/UNINSTALL.md)
-- [Security policy](SECURITY.md)
-- [Contributing](CONTRIBUTING.md)
-- [Changelog](CHANGELOG.md)
+```sh
+python3 -m unittest discover -s Tests/Python -v
+xcodebuild -project Pinshift.xcodeproj -scheme Pinshift \
+  -destination 'platform=macOS' CODE_SIGN_IDENTITY=- test
+```
 
-## Architecture overview
+The worker uses Python's standard library and Apple's native CoreDevice commands; no Python package, root tunnel, cloud account, or public server is needed. The Xcode installation supplies `/usr/bin/python3`.
 
-The SwiftUI app writes atomic configuration and heartbeat state and manages a
-per-user LaunchAgent. The LaunchAgent runs the bundled `keeper.py` using the
-separately installed pymobiledevice3 environment. The worker opens a trusted
-developer tunnel, durably marks that simulation may be active before sending a
-location, and writes a separate atomic successful-clear status after the clear
-command returns without error.
+See [architecture and protocol](docs/ARCHITECTURE.md), [privacy](docs/PRIVACY.md), [troubleshooting and removal](docs/TROUBLESHOOTING.md), and [logo source](docs/DESIGN.md).
 
-Human-readable logs rotate automatically. The UI reads only the latest 50 events
-and keeps diagnostics collapsed by default. Runtime configuration, status, logs,
-and pairing credentials remain outside the repository under the current user's
-Library and pymobiledevice3 directories.
+## Attribution
 
-Read the detailed [architecture guide](docs/ARCHITECTURE.md) and
-[privacy documentation](docs/PRIVACY.md).
-
-## Troubleshooting
-
-If GeoShift cannot see the iPhone:
-
-- unlock the phone and keep both devices on the same local network;
-- check the saved pair under **Settings → Connection**;
-- allow Bonjour/local traffic through VPN or firewall software;
-- retry the in-app pairing assistant on iOS 27+;
-- use a trusted USB connection as a fallback;
-- choose **Reconnect** after changing those conditions.
-
-For stuck locations, pairing failures, Command-Q refusal, and safe log collection,
-see [Troubleshooting](docs/TROUBLESHOOTING.md).
-
-## Responsible use
-
-Use GeoShift only on devices you own or are authorized to test. Location-aware
-services may prohibit simulated coordinates, and accounts may be restricted when
-their rules are violated. GeoShift is a testing utility, not an anti-detection,
-ban-evasion, fraud, or access-control bypass tool.
-
-## License
-
-GeoShift is available under the [MIT License](LICENSE). pymobiledevice3 is a
-separate runtime dependency distributed under GPL-3.0 and is not bundled into
-the GeoShift app or repository.
+Based on GeoShift by Lemelson, especially its durable location recovery and application-liveness design. The original MIT copyright and license are retained in [LICENSE](LICENSE). Pinshift adds the native CoreDevice backend, map UI, branding, encrypted local protocol, and iOS companion. Upstream history remains in this fork.

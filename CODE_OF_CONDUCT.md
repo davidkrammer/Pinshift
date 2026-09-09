@@ -1,6 +1,6 @@
 # Code of Conduct
 
-GeoShift is an open-source engineering project. Be respectful, constructive,
+Pinshift is an open-source engineering project. Be respectful, constructive,
 and specific. Discuss the work rather than the person, welcome corrections,
 and avoid harassment, discrimination, threats, or publication of private data.
 

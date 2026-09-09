@@ -1,0 +1,609 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		05163C402E259DD68CC580A7 /* ProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4057193DFF7621DBC25A89 /* ProtocolTests.swift */; };
+		0736F0663D307C393474970E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B6EFDC012B7BE481F821EF /* Models.swift */; };
+		17E3C6C6A92E2C72A8AFACF7 /* PlaceMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4677D0A14E23A567C0B2E150 /* PlaceMap.swift */; };
+		1F8EEB11ACCE5F7EE14EB82C /* QRScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A508CB4F3B3AD624D8405A7 /* QRScanner.swift */; };
+		2CCF283E3A31B2E7104A61DC /* HostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A67CFAA7251CD7B5F64DA8 /* HostModel.swift */; };
+		39A03E1B2C0699463BA189E7 /* LocalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B04A2ED17E60EC51BF7A4A5 /* LocalLink.swift */; };
+		3E734F56BD55DBB19885EF22 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B6EFDC012B7BE481F821EF /* Models.swift */; };
+		420749CB4E32985D1EF8F5EA /* AppLivenessLease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDB3173722D46904B9EE951 /* AppLivenessLease.swift */; };
+		6714B8B749A1FFA00FFA784D /* SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7786F7D9E95B028C03D4E3 /* SecureStore.swift */; };
+		6BAEB8F98EB44FAF191C1225 /* CoreDeviceInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AED60778B73155E6762F519 /* CoreDeviceInventory.swift */; };
+		793574920F8F41C3033E7403 /* RemoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA191E738847CADE0329FD21 /* RemoteView.swift */; };
+		7CEDC5F6D5B8002F13152FB8 /* PinshiftRemoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91478071F9C1A57EF597FB4B /* PinshiftRemoteApp.swift */; };
+		866B7CF9810A940A133B0AE9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5A2EE3E55DAD98248FAA085 /* Assets.xcassets */; };
+		972AB359B7BE641C9F0C504D /* PlaceMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4677D0A14E23A567C0B2E150 /* PlaceMap.swift */; };
+		9B46E5E01862B05A9DC067C4 /* SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7786F7D9E95B028C03D4E3 /* SecureStore.swift */; };
+		B54F7AC659552D3CB90E6851 /* RemoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629BFE7F0B2B1941846E9E27 /* RemoteModel.swift */; };
+		BFF2E746ACB29116BAE98105 /* PinshiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A814D45A5346CE0A7A1E14 /* PinshiftApp.swift */; };
+		C20149660BBA57224911976B /* HostServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D49CBBA8A9F67F24DC47135 /* HostServer.swift */; };
+		D980F918CFFF63B15F868527 /* LinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A36151EF4B167AE4F00AB2 /* LinkTests.swift */; };
+		E4BBEC85F40C456C39169EEA /* LocalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B04A2ED17E60EC51BF7A4A5 /* LocalLink.swift */; };
+		EDD03F09C004EF58B48C5CFC /* HostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01705B986E467EC681BAB33 /* HostView.swift */; };
+		EDEF86DDDDED0206285047B5 /* DiscoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394A56B162D5A6AA6D4ADBEC /* DiscoveryTests.swift */; };
+		F4A5A4CA43923E86933B68B7 /* keeper.py in Resources */ = {isa = PBXBuildFile; fileRef = ECE862D2CE452F40C81F01B6 /* keeper.py */; };
+		FA6ECDF568D492A8A86785CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5A2EE3E55DAD98248FAA085 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B19A919BCEF7F433AC3E413B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1FCECCEB795F522793D12CCE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B7021D3DBB60E7F32EBA6E61;
+			remoteInfo = Pinshift;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1B04A2ED17E60EC51BF7A4A5 /* LocalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLink.swift; sourceTree = "<group>"; };
+		1BEF6C45ADAEA560937FB9C0 /* Pinshift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pinshift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		36B6EFDC012B7BE481F821EF /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		394A56B162D5A6AA6D4ADBEC /* DiscoveryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryTests.swift; sourceTree = "<group>"; };
+		3A508CB4F3B3AD624D8405A7 /* QRScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanner.swift; sourceTree = "<group>"; };
+		3EDB3173722D46904B9EE951 /* AppLivenessLease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLivenessLease.swift; sourceTree = "<group>"; };
+		3FF12D26019F9588D1A32019 /* PinshiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PinshiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4677D0A14E23A567C0B2E150 /* PlaceMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMap.swift; sourceTree = "<group>"; };
+		51A814D45A5346CE0A7A1E14 /* PinshiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinshiftApp.swift; sourceTree = "<group>"; };
+		5AED60778B73155E6762F519 /* CoreDeviceInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDeviceInventory.swift; sourceTree = "<group>"; };
+		629BFE7F0B2B1941846E9E27 /* RemoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteModel.swift; sourceTree = "<group>"; };
+		86A67CFAA7251CD7B5F64DA8 /* HostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostModel.swift; sourceTree = "<group>"; };
+		8D49CBBA8A9F67F24DC47135 /* HostServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostServer.swift; sourceTree = "<group>"; };
+		91478071F9C1A57EF597FB4B /* PinshiftRemoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinshiftRemoteApp.swift; sourceTree = "<group>"; };
+		A01705B986E467EC681BAB33 /* HostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostView.swift; sourceTree = "<group>"; };
+		AA7786F7D9E95B028C03D4E3 /* SecureStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStore.swift; sourceTree = "<group>"; };
+		B5A2EE3E55DAD98248FAA085 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CE4057193DFF7621DBC25A89 /* ProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolTests.swift; sourceTree = "<group>"; };
+		D42A415F70D3F1DAFBD81712 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		DD8188CA2AD086F98B18221A /* PinshiftRemote.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = PinshiftRemote.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEE9E1BA86B47EBB9DA8677F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E2A36151EF4B167AE4F00AB2 /* LinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkTests.swift; sourceTree = "<group>"; };
+		ECE862D2CE452F40C81F01B6 /* keeper.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = keeper.py; sourceTree = "<group>"; };
+		FA191E738847CADE0329FD21 /* RemoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		5FFDF11731A560DDA71F97DA /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				DEE9E1BA86B47EBB9DA8677F /* Info.plist */,
+				91478071F9C1A57EF597FB4B /* PinshiftRemoteApp.swift */,
+				3A508CB4F3B3AD624D8405A7 /* QRScanner.swift */,
+				629BFE7F0B2B1941846E9E27 /* RemoteModel.swift */,
+				FA191E738847CADE0329FD21 /* RemoteView.swift */,
+			);
+			name = iOS;
+			path = App/iOS;
+			sourceTree = "<group>";
+		};
+		6C3BA45AFE7B80A029C340AE /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				3EDB3173722D46904B9EE951 /* AppLivenessLease.swift */,
+				5AED60778B73155E6762F519 /* CoreDeviceInventory.swift */,
+				86A67CFAA7251CD7B5F64DA8 /* HostModel.swift */,
+				8D49CBBA8A9F67F24DC47135 /* HostServer.swift */,
+				A01705B986E467EC681BAB33 /* HostView.swift */,
+				D42A415F70D3F1DAFBD81712 /* Info.plist */,
+				51A814D45A5346CE0A7A1E14 /* PinshiftApp.swift */,
+			);
+			name = Mac;
+			path = App/Mac;
+			sourceTree = "<group>";
+		};
+		83804A800B27FC09E5477E90 = {
+			isa = PBXGroup;
+			children = (
+				5FFDF11731A560DDA71F97DA /* iOS */,
+				6C3BA45AFE7B80A029C340AE /* Mac */,
+				891351548CEA68F02E28A035 /* PinshiftTests */,
+				908E8EF0CDF84FD98E7D6D64 /* Resources */,
+				8FB54BD55A2FF518D9C6E000 /* Shared */,
+				B2314D0251BC6CAEE2A734AC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		891351548CEA68F02E28A035 /* PinshiftTests */ = {
+			isa = PBXGroup;
+			children = (
+				394A56B162D5A6AA6D4ADBEC /* DiscoveryTests.swift */,
+				E2A36151EF4B167AE4F00AB2 /* LinkTests.swift */,
+				CE4057193DFF7621DBC25A89 /* ProtocolTests.swift */,
+			);
+			name = PinshiftTests;
+			path = Tests/PinshiftTests;
+			sourceTree = "<group>";
+		};
+		8FB54BD55A2FF518D9C6E000 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				1B04A2ED17E60EC51BF7A4A5 /* LocalLink.swift */,
+				36B6EFDC012B7BE481F821EF /* Models.swift */,
+				4677D0A14E23A567C0B2E150 /* PlaceMap.swift */,
+				AA7786F7D9E95B028C03D4E3 /* SecureStore.swift */,
+			);
+			name = Shared;
+			path = App/Shared;
+			sourceTree = "<group>";
+		};
+		908E8EF0CDF84FD98E7D6D64 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B5A2EE3E55DAD98248FAA085 /* Assets.xcassets */,
+				ECE862D2CE452F40C81F01B6 /* keeper.py */,
+			);
+			name = Resources;
+			path = App/Resources;
+			sourceTree = "<group>";
+		};
+		B2314D0251BC6CAEE2A734AC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1BEF6C45ADAEA560937FB9C0 /* Pinshift.app */,
+				DD8188CA2AD086F98B18221A /* PinshiftRemote.app */,
+				3FF12D26019F9588D1A32019 /* PinshiftTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B7021D3DBB60E7F32EBA6E61 /* Pinshift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 961D551F29DC1932DA0D9E7B /* Build configuration list for PBXNativeTarget "Pinshift" */;
+			buildPhases = (
+				9B625CF18C5E1575156A5CE2 /* Sources */,
+				AB45B45D4A2316F88E60643F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Pinshift;
+			packageProductDependencies = (
+			);
+			productName = Pinshift;
+			productReference = 1BEF6C45ADAEA560937FB9C0 /* Pinshift.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D6C86D8F934395EF91A7C8EA /* PinshiftRemote */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D013C42BCCB17FF0CD6421EC /* Build configuration list for PBXNativeTarget "PinshiftRemote" */;
+			buildPhases = (
+				BB0687EA8F8CF4F03FED7312 /* Sources */,
+				4C1E9D7DC3E1382A64774F22 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PinshiftRemote;
+			packageProductDependencies = (
+			);
+			productName = PinshiftRemote;
+			productReference = DD8188CA2AD086F98B18221A /* PinshiftRemote.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E3A124DAE1EE8A39807B6510 /* PinshiftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0B1181BC1F1EE1BCB417860 /* Build configuration list for PBXNativeTarget "PinshiftTests" */;
+			buildPhases = (
+				F40E08BBA8BB276B4915E3DF /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4098D1075C1FCBD881E2A8A3 /* PBXTargetDependency */,
+			);
+			name = PinshiftTests;
+			packageProductDependencies = (
+			);
+			productName = PinshiftTests;
+			productReference = 3FF12D26019F9588D1A32019 /* PinshiftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1FCECCEB795F522793D12CCE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					B7021D3DBB60E7F32EBA6E61 = {
+						DevelopmentTeam = WGZZ8JM999;
+						ProvisioningStyle = Automatic;
+					};
+					D6C86D8F934395EF91A7C8EA = {
+						DevelopmentTeam = WGZZ8JM999;
+						ProvisioningStyle = Automatic;
+					};
+					E3A124DAE1EE8A39807B6510 = {
+						DevelopmentTeam = WGZZ8JM999;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = BDA9AE46892FB557F5606D45 /* Build configuration list for PBXProject "Pinshift" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 83804A800B27FC09E5477E90;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B2314D0251BC6CAEE2A734AC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B7021D3DBB60E7F32EBA6E61 /* Pinshift */,
+				D6C86D8F934395EF91A7C8EA /* PinshiftRemote */,
+				E3A124DAE1EE8A39807B6510 /* PinshiftTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C1E9D7DC3E1382A64774F22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA6ECDF568D492A8A86785CD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB45B45D4A2316F88E60643F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				866B7CF9810A940A133B0AE9 /* Assets.xcassets in Resources */,
+				F4A5A4CA43923E86933B68B7 /* keeper.py in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9B625CF18C5E1575156A5CE2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				420749CB4E32985D1EF8F5EA /* AppLivenessLease.swift in Sources */,
+				6BAEB8F98EB44FAF191C1225 /* CoreDeviceInventory.swift in Sources */,
+				2CCF283E3A31B2E7104A61DC /* HostModel.swift in Sources */,
+				C20149660BBA57224911976B /* HostServer.swift in Sources */,
+				EDD03F09C004EF58B48C5CFC /* HostView.swift in Sources */,
+				E4BBEC85F40C456C39169EEA /* LocalLink.swift in Sources */,
+				3E734F56BD55DBB19885EF22 /* Models.swift in Sources */,
+				BFF2E746ACB29116BAE98105 /* PinshiftApp.swift in Sources */,
+				17E3C6C6A92E2C72A8AFACF7 /* PlaceMap.swift in Sources */,
+				9B46E5E01862B05A9DC067C4 /* SecureStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB0687EA8F8CF4F03FED7312 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39A03E1B2C0699463BA189E7 /* LocalLink.swift in Sources */,
+				0736F0663D307C393474970E /* Models.swift in Sources */,
+				7CEDC5F6D5B8002F13152FB8 /* PinshiftRemoteApp.swift in Sources */,
+				972AB359B7BE641C9F0C504D /* PlaceMap.swift in Sources */,
+				1F8EEB11ACCE5F7EE14EB82C /* QRScanner.swift in Sources */,
+				B54F7AC659552D3CB90E6851 /* RemoteModel.swift in Sources */,
+				793574920F8F41C3033E7403 /* RemoteView.swift in Sources */,
+				6714B8B749A1FFA00FFA784D /* SecureStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F40E08BBA8BB276B4915E3DF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EDEF86DDDDED0206285047B5 /* DiscoveryTests.swift in Sources */,
+				D980F918CFFF63B15F868527 /* LinkTests.swift in Sources */,
+				05163C402E259DD68CC580A7 /* ProtocolTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4098D1075C1FCBD881E2A8A3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B7021D3DBB60E7F32EBA6E61 /* Pinshift */;
+			targetProxy = B19A919BCEF7F433AC3E413B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		16B1D15BB74796A4B24885D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = WGZZ8JM999;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		385098836378692627ED7C35 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = App/iOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = at.strics.PinshiftRemote;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		8ADC1F1A1C39E10E4E9092D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = App/iOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = at.strics.PinshiftRemote;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		99337C34C65F383FD5C8A51F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = App/Mac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = at.strics.Pinshift;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BC1585A7CF2AB4B64536DC8C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = App/Mac/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = at.strics.Pinshift;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C7EB265055ABB16A66FD2084 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = at.strics.PinshiftTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pinshift.app/Contents/MacOS/Pinshift";
+			};
+			name = Release;
+		};
+		EAEE1A7F27E802A96255B8E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = WGZZ8JM999;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F618CDE2DF6C54E1F701C92E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = at.strics.PinshiftTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pinshift.app/Contents/MacOS/Pinshift";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		961D551F29DC1932DA0D9E7B /* Build configuration list for PBXNativeTarget "Pinshift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC1585A7CF2AB4B64536DC8C /* Debug */,
+				99337C34C65F383FD5C8A51F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A0B1181BC1F1EE1BCB417860 /* Build configuration list for PBXNativeTarget "PinshiftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F618CDE2DF6C54E1F701C92E /* Debug */,
+				C7EB265055ABB16A66FD2084 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BDA9AE46892FB557F5606D45 /* Build configuration list for PBXProject "Pinshift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EAEE1A7F27E802A96255B8E2 /* Debug */,
+				16B1D15BB74796A4B24885D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D013C42BCCB17FF0CD6421EC /* Build configuration list for PBXNativeTarget "PinshiftRemote" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				385098836378692627ED7C35 /* Debug */,
+				8ADC1F1A1C39E10E4E9092D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1FCECCEB795F522793D12CCE /* Project object */;
+}

@@ -1,70 +1,13 @@
 # Architecture
 
-GeoShift separates the macOS user interface from the persistent device worker.
+`App/Mac` contains the SwiftUI host, menu bar controller, Bonjour server, and launchd integration. `App/iOS` contains the companion, QR scanner, and reconnecting Bonjour client. Shared models, MapKit search, Keychain storage, and TLS framing live in `App/Shared`.
 
-```text
-SwiftUI app
-  ├─ writes atomic config.json + app heartbeat
-  ├─ holds a kernel liveness lease while the GUI process exists
-  ├─ reads atomic status.json
-  ├─ manages a per-user LaunchAgent
-  └─ runs the iOS 27 pairing assistant
-          │
-          ▼
-LaunchAgent → bundled keeper.py → pymobiledevice3 → trusted physical iPhone
-```
+The Mac advertises a random service identity using `_pinshift._tcp`. A QR code transfers that identity and a random 256-bit pairing key. Both apps store the key in Keychain. Network.framework authenticates and encrypts the connection with TLS 1.2 PSK and AES-128-GCM; there is no certificate-validation bypass. Reset pairing rotates the key and service identity and disconnects all remotes. Anyone possessing the code has control of this location simulator, so do not publish it.
 
-## SwiftUI controller
+Messages are newline-delimited JSON, capped at 64 KB. Commands are `state`, `select`, `target`, `start`, and `stop`. Each has a request UUID. The host serializes requests, validates coordinates and target selection, acknowledges commands, and broadcasts status. The remote disables commands when disconnected or awaiting an acknowledgement and never replays a Start command automatically after reconnecting.
 
-`KeeperController` owns the selected city, timing settings, state presentation,
-pairing flow, app-lifetime monitor, and LaunchAgent lifecycle. Monitoring starts
-idempotently with the app and refreshes immediately after activation. English is
-the first-run language;
-`LocalizationStore` persists an explicit English/Russian selection without
-changing the safety request or worker identity.
+`App/Resources/keeper.py` persists a conservative `simulationMayBeActive` flag before applying location. It uses the native `devicectl` coordinate/clear commands on the exact chosen device. If a clear fails, a durable restore request remains queued and launchd retries when the phone returns. A crash does not silently report that GPS was restored. A file lock plus heartbeat detects a departed host. No privileged daemon is installed.
 
-## Configuration and status
+State: `~/Library/Application Support/Pinshift/`. Worker log: `~/Library/Logs/Pinshift.log`. LaunchAgent: `~/Library/LaunchAgents/at.strics.pinshift.keeper.plist`.
 
-`config.json` contains a unique request ID, selected destination, intervals,
-whether simulation is requested, and the app heartbeat timestamp.
-
-`status.json` is a separate pessimistic latch. Before sending a no-reply location
-set command, the worker durably records that simulation may be active. Only a
-clear command that returns successfully through the developer channel writes
-`simulationMayBeActive = false`. The API does not acknowledge a physical GPS fix.
-
-The UI never treats a missing process, stale log, or truncated diagnostics file
-as proof that real GPS has returned.
-
-## Connection paths
-
-The worker chooses one exact trusted iPhone and supports:
-
-1. USB/usbmux;
-2. trusted legacy Wi-Fi lockdown;
-3. iOS 27+ RemotePairing over Bonjour and a saved pairing record.
-
-Multiple ambiguous devices are rejected. A saved target is never silently
-replaced while simulation may be active.
-
-## Fail-safe lifecycle
-
-- Normal Start/Restore updates configuration without tearing down a healthy tunnel.
-- Closing the window or Command-Q queues Restore GPS.
-- If that handoff cannot be proven safe, termination is refused.
-- The app writes a heartbeat every 30 seconds and holds an exclusive advisory
-  lock for its process lifetime.
-- A heartbeat older than five minutes triggers a liveness probe. Start converts
-  to Restore GPS only if the worker can acquire and retain that lock, proving the
-  GUI process is gone. An alive, delayed, App-Napped, or suspended GUI keeps Start.
-- The worker retains the acquired cleanup lease until the clear result is written
-  durably, preventing a second GUI from racing an in-progress crash cleanup.
-- A five-minute watchdog repairs a missing or stale worker.
-- If the phone is offline, `clearPending` persists until the trusted phone returns.
-- A corrupt or missing configuration triggers a conservative clear attempt.
-- Forced worker termination exits successfully only after a durable clear status.
-
-## Diagnostics
-
-The worker uses rotating 2 MiB logs with two backups. The UI reads only the last
-50 events every ten seconds and keeps diagnostics collapsed by default.
+Closing the Mac window keeps the server running. Quitting requests a restore; if the iPhone is unavailable, the worker continues the pending restore. Restarting the host does not silently resume a previous active location.

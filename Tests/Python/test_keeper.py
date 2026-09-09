@@ -10,9 +10,9 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 
-KEEPER_PATH = Path(__file__).parents[2] / "Sources/GeoShift/Resources/keeper.py"
-os.environ["GEOSHIFT_LOG_PATH"] = f"/tmp/geoshift-worker-tests-{os.getpid()}.log"
-SPEC = importlib.util.spec_from_file_location("geoshift_keeper", KEEPER_PATH)
+KEEPER_PATH = Path(__file__).parents[2] / "App/Resources/keeper.py"
+os.environ["PINSHIFT_LOG_PATH"] = f"/tmp/pinshift-worker-tests-{os.getpid()}.log"
+SPEC = importlib.util.spec_from_file_location("pinshift_keeper", KEEPER_PATH)
 keeper = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(keeper)
 
@@ -168,8 +168,8 @@ class WorkerSafetyTests(unittest.IsolatedAsyncioTestCase):
             status_path = Path(directory) / "status.json"
             config = {
                 "requestID": "request",
-                "cityName": "Белград",
-                "country": "Сербия",
+                "cityName": "Belgrade",
+                "country": "Serbia",
                 "latitude": 44.8125,
                 "longitude": 20.4612,
             }
@@ -205,8 +205,8 @@ class WorkerSafetyTests(unittest.IsolatedAsyncioTestCase):
         location.set = fake_set
         config = {
             "requestID": "request",
-            "cityName": "Белград",
-            "country": "Сербия",
+            "cityName": "Belgrade",
+            "country": "Serbia",
             "latitude": 44.8125,
             "longitude": 20.4612,
         }
@@ -269,8 +269,8 @@ class WorkerSafetyTests(unittest.IsolatedAsyncioTestCase):
             status_path = Path(directory) / "status.json"
             config_path.write_text(json.dumps({
                 "cityID": "moscow",
-                "cityName": "Москва",
-                "country": "Россия",
+                "cityName": "Moscow",
+                "country": "Russia",
                 "latitude": 55.7558,
                 "longitude": 37.6173,
                 "retrySeconds": 5,
@@ -280,8 +280,8 @@ class WorkerSafetyTests(unittest.IsolatedAsyncioTestCase):
             }))
             stop_event = asyncio.Event()
 
-            async def no_devices():
-                return []
+            async def no_devices(*args):
+                raise keeper.NoDeviceConnectedError()
 
             async def stop_after_first_attempt(*args, **kwargs):
                 stop_event.set()
@@ -290,8 +290,7 @@ class WorkerSafetyTests(unittest.IsolatedAsyncioTestCase):
             with (
                 patch.object(keeper, "CONFIG_PATH", config_path),
                 patch.object(keeper, "STATUS_PATH", status_path),
-                patch.object(keeper, "list_devices", no_devices),
-                patch.object(keeper, "iter_remote_paired_identifiers", return_value=[]),
+                patch.object(keeper, "resolve_target_device", no_devices),
                 patch.object(
                     keeper,
                     "wait_until_timeout_or_config_change",
@@ -341,74 +340,14 @@ class WorkerSafetyTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(status["requestID"], "last-known-request")
             self.assertTrue(status["simulationMayBeActive"])
 
-    async def test_multiple_devices_are_rejected_without_a_saved_target(self):
-        async def fake_list_devices():
-            return [SimpleNamespace(serial="phone-a"), SimpleNamespace(serial="phone-b")]
-
-        with patch.object(keeper, "list_devices", fake_list_devices):
-            with self.assertRaises(keeper.AmbiguousDeviceError):
-                await keeper.resolve_target_device(None)
-
-    async def test_remote_pairing_is_used_when_usbmux_has_no_device(self):
-        async def no_devices():
-            return []
-
-        with (
-            patch.object(keeper, "list_devices", no_devices),
-            patch.object(
-                keeper,
-                "iter_remote_paired_identifiers",
-                return_value=["target-phone"],
-            ),
-        ):
-            target = await keeper.resolve_target_device(None)
-
-        self.assertEqual(target, ("target-phone", True))
-
-    async def test_remote_pairing_discovery_waits_long_enough_for_iphone(self):
-        captured = {}
-        fake_service = SimpleNamespace(udid="target-phone")
-
-        async def find_services(*, bonjour_timeout, udid):
-            captured["bonjour_timeout"] = bonjour_timeout
-            captured["udid"] = udid
-            return [fake_service]
-
-        class FakeTunnel:
-            def __init__(self, serial, autopair):
-                self.serial = serial
-                self.autopair = autopair
-
-            async def aopen(self):
-                provider, _ = await keeper.userspace_tunnel._create_no_root_tunnel_provider(
-                    self.serial,
-                    self.autopair,
-                )
-                return provider
-
-        with (
-            patch.object(keeper, "UserspaceRsdTunnel", FakeTunnel),
-            patch.object(
-                keeper.tunnel_service,
-                "get_remote_pairing_tunnel_services",
-                find_services,
-            ),
-        ):
-            tunnel, service = await keeper.open_target_tunnel("target-phone", True)
-
-        self.assertIsInstance(tunnel, FakeTunnel)
-        self.assertIs(service, fake_service)
-        self.assertEqual(captured["udid"], "target-phone")
-        self.assertGreaterEqual(captured["bonjour_timeout"], 8)
-
     async def test_matching_cleared_status_exits_without_reopening_phone(self):
         with tempfile.TemporaryDirectory() as directory:
             config_path = Path(directory) / "config.json"
             status_path = Path(directory) / "status.json"
             config_path.write_text(json.dumps({
                 "cityID": "moscow",
-                "cityName": "Москва",
-                "country": "Россия",
+                "cityName": "Moscow",
+                "country": "Russia",
                 "latitude": 55.7558,
                 "longitude": 37.6173,
                 "retrySeconds": 5,
@@ -434,6 +373,45 @@ class WorkerSafetyTests(unittest.IsolatedAsyncioTestCase):
                 patch.object(keeper, "resolve_target_device", must_not_resolve),
             ):
                 await keeper.run_worker(asyncio.Event())
+
+
+class NativeDiscoveryTests(unittest.IsolatedAsyncioTestCase):
+    async def discover(self, devices, saved=None):
+        class Process:
+            returncode = 0
+            async def communicate(self):
+                return json.dumps({"result": {"devices": devices}}).encode(), b""
+        async def launch(*args, **kwargs):
+            return Process()
+        with patch.object(keeper.asyncio, "create_subprocess_exec", launch), patch.object(keeper, "load_config", return_value={}):
+            return await keeper.resolve_target_device(saved)
+
+    def phone(self, udid, state="connected", transport="localNetwork", reality="physical"):
+        return {"properties": {"hardware": {"udid": udid, "deviceType": "iPhone", "reality": reality}, "connection": {"state": state, "transportType": transport}}}
+
+    async def test_multiple_phones_require_explicit_target(self):
+        with self.assertRaises(keeper.AmbiguousDeviceError):
+            await self.discover([self.phone("a"), self.phone("b")])
+        self.assertEqual(await self.discover([self.phone("a"), self.phone("b")], "b"), ("b", True))
+
+    async def test_sleeping_wifi_tunnel_is_reachable_but_simulator_is_excluded(self):
+        result = await self.discover([self.phone("phone", state="disconnected"), self.phone("sim", transport="sameMachine", reality="simulated")])
+        self.assertEqual(result, ("phone", True))
+
+    async def test_missing_saved_phone_never_falls_back_to_another_phone(self):
+        with self.assertRaises(keeper.NoDeviceConnectedError):
+            await self.discover([self.phone("other")], "target")
+
+    async def test_native_location_error_is_not_acknowledged_as_success(self):
+        class Process:
+            returncode = 1
+            async def communicate(self):
+                return b"", b"Device is locked"
+        async def launch(*args, **kwargs):
+            return Process()
+        with patch.object(keeper.asyncio, "create_subprocess_exec", launch):
+            with self.assertRaisesRegex(RuntimeError, "Device is locked"):
+                await keeper.CoreDeviceLocation("target").set(50, 14)
 
 
 if __name__ == "__main__":

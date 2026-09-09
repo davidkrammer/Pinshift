@@ -1,35 +1,9 @@
 # Privacy
 
-GeoShift has no analytics, advertising SDK, account system, cloud backend, or
-remote application server. It does not upload the selected city, coordinates,
-device identity, diagnostics, or pairing material.
+Pinshift has no analytics, account system, or application cloud backend. Commands, pairing credentials, device names, coordinates, saved places, and worker state remain on your devices and the local network.
 
-## Local data
+Apple MapKit supplies map tiles and search results. Map viewing and searches contact Apple's services and are subject to Apple's privacy terms. This app is therefore not an offline map tool.
 
-GeoShift stores runtime data only for the current macOS user:
+The Mac is reachable by paired remotes on local network interfaces. Cellular and peer-to-peer connections are excluded. Do not publish the pairing code or forward its service port to the internet. Reset pairing on the Mac to revoke all existing remotes.
 
-| Path | Purpose |
-| --- | --- |
-| `~/Library/Application Support/GeoShift/config.json` | selected city, intervals, request ID, safety heartbeat |
-| `~/Library/Application Support/GeoShift/status.json` | worker phase, exact target UDID, clear-safety latch |
-| `~/Library/Application Support/GeoShift/pairing-status.json` | temporary pairing assistant state and code |
-| `~/Library/Logs/GeoShift.log` | rotating diagnostics |
-| `~/.pymobiledevice3/remote_*.plist` | RemotePairing credentials managed by pymobiledevice3 |
-| `~/Library/LaunchAgents/com.lemelson.geoshift.keeper.plist` | per-user background worker definition |
-
-The exact device UDID is stored locally while needed to prevent GeoShift from
-clearing or controlling the wrong iPhone.
-
-## Network behavior
-
-GeoShift communicates with the trusted iPhone over USB or the local network.
-Installing source dependencies and cloning the repository use their normal
-internet endpoints; GeoShift itself does not operate a cloud service.
-
-## Publishing diagnostics
-
-Logs can contain device identifiers, local IP addresses, usernames, or local
-paths. Review and redact them before opening a public issue. Never publish
-pairing records or trust material.
-
-See [Uninstall](UNINSTALL.md) to remove all local data.
+Logs and state can contain exact selected coordinates and device identifiers. Review them before sharing a bug report. The QR scanner uses the camera to decode a pairing code and does not save photos or video.

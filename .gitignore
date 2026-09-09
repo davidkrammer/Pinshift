@@ -5,6 +5,7 @@ __pycache__/
 *.py[cod]
 *.app/
 *.xcuserstate
+xcuserdata/
 DerivedData/
 *.log
 .env

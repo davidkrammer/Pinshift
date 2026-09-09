@@ -15,8 +15,8 @@ Include the affected version, macOS and iOS versions, reproduction steps, and
 the expected impact. Please allow a reasonable period for investigation before
 publishing details.
 
-GeoShift does not collect or transmit telemetry. Device identifiers may appear
-in local pymobiledevice3 diagnostics, so logs should be reviewed before they
+Pinshift does not collect or transmit telemetry. Device identifiers may appear
+in local location-worker diagnostics, so logs should be reviewed before they
 are attached to a public issue.
 
 Never include pairing records, trust records, private keys, full device UDIDs,

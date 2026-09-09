@@ -1,0 +1,91 @@
+name: Pinshift
+options:
+  bundleIdPrefix: at.strics
+  deploymentTarget:
+    macOS: '14.0'
+    iOS: '18.0'
+  developmentLanguage: en
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    DEVELOPMENT_TEAM: WGZZ8JM999
+    MARKETING_VERSION: '1.0.0'
+    CURRENT_PROJECT_VERSION: '1'
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+    SWIFT_EMIT_LOC_STRINGS: NO
+targets:
+  Pinshift:
+    type: application
+    platform: macOS
+    sources:
+      - path: App/Shared
+      - path: App/Mac
+      - path: App/Resources/Assets.xcassets
+      - path: App/Resources/keeper.py
+        buildPhase: resources
+    info:
+      path: App/Mac/Info.plist
+      properties:
+        CFBundleDisplayName: Pinshift
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en]
+        NSLocalNetworkUsageDescription: Pinshift connects to your paired iPhone remote on the local network.
+        NSBonjourServices: ['_pinshift._tcp']
+        LSApplicationCategoryType: public.app-category.developer-tools
+        NSHumanReadableCopyright: 'Copyright © 2026 STRICS. Based on GeoShift by Lemelson.'
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: at.strics.Pinshift
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: YES
+  PinshiftRemote:
+    type: application
+    platform: iOS
+    sources:
+      - path: App/Shared
+      - path: App/iOS
+      - path: App/Resources/Assets.xcassets
+    info:
+      path: App/iOS/Info.plist
+      properties:
+        CFBundleDisplayName: Pinshift
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en]
+        NSLocalNetworkUsageDescription: Pinshift finds and controls your paired Mac on the same Wi-Fi network.
+        NSBonjourServices: ['_pinshift._tcp']
+        NSCameraUsageDescription: Scan the pairing QR code displayed by Pinshift on your Mac.
+        CFBundleURLTypes:
+          - CFBundleURLName: at.strics.pinshift.pair
+            CFBundleURLSchemes: [pinshift]
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: at.strics.PinshiftRemote
+        TARGETED_DEVICE_FAMILY: '1'
+  PinshiftTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/PinshiftTests
+    dependencies:
+      - target: Pinshift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: at.strics.PinshiftTests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Pinshift:
+    build:
+      targets:
+        Pinshift: all
+        PinshiftTests: [test]
+    test:
+      targets: [PinshiftTests]
+  PinshiftRemote:
+    build:
+      targets:
+        PinshiftRemote: all

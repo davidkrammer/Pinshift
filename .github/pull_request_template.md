@@ -4,10 +4,10 @@ Describe the user-visible behavior and why the change is needed.
 
 ## Verification
 
-- [ ] `swift test`
+- [ ] Xcode Mac tests and iPhone companion build
 - [ ] Python worker tests
 - [ ] `git diff --check`
-- [ ] English and Russian UI resources remain synchronized
+- [ ] Application UI remains English-only
 - [ ] No generated app/build files, logs, device IDs, local paths, or pairing data
 
 ## Safety impact
