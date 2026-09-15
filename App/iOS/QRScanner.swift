@@ -9,9 +9,9 @@ struct QRScanner: View {
     var body: some View {
         NavigationStack {
             Group {
-                if allowed { CameraScanner(found: found).ignoresSafeArea(edges: .bottom).overlay(alignment: .bottom) { Text("Scan the code shown in Pinshift on your Mac").padding(20).background(.regularMaterial, in: Capsule()).padding(20) } }
-                else { ContentUnavailableView("Camera access needed", systemImage: "camera", description: Text(checked ? "Enable Camera access for Pinshift in Settings, or enter the pairing code instead." : "Requesting camera access…")) }
-            }.navigationTitle("Pair with Mac").navigationBarTitleDisplayMode(.inline)
+                if allowed { CameraScanner(found: found).ignoresSafeArea(edges: .bottom) }
+                else { ContentUnavailableView("Camera access needed", systemImage: "camera", description: Text(checked ? "Allow Camera in Settings or enter the pairing code." : "Requesting camera access…")) }
+            }.navigationTitle("Scan code").navigationBarTitleDisplayMode(.inline)
                 .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } } }
         }.task { allowed = await AVCaptureDevice.requestAccess(for: .video); checked = true }
     }

@@ -5,7 +5,6 @@ import Foundation
 @MainActor final class HostModel: ObservableObject {
     @Published var state = HostSnapshot()
     @Published var error: String?
-    @Published var favorites: [Place] = []
     @Published var server: HostServer?
     private let root = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/Pinshift")
     private var lease: AppLivenessLease?
@@ -27,12 +26,11 @@ import Foundation
         if let d = try? Data(contentsOf: root.appendingPathComponent("selection.json")), let previous = try? JSONDecoder().decode(HostSnapshot.self, from: d) {
             state.place = previous.place; state.target = previous.target
         }
-        favorites = (UserDefaults.standard.data(forKey: "favorites").flatMap { try? JSONDecoder().decode([Place].self, from: $0) }) ?? []
         Task {
-            await refreshDevices()
             await refresh()
             if state.mayBeActive { await command(WireMessage(kind: "stop")) }
             do { server = try HostServer(model: self) } catch { self.error = error.localizedDescription }
+            await refreshDevices()
         }
         timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in Task { @MainActor in await self?.tick() } }
     }
@@ -46,11 +44,6 @@ import Foundation
         guard !state.needsStop else { error = "Restore GPS before changing the target iPhone."; return }
         guard state.devices.contains(where: { $0.id == id }) else { error = "That iPhone is no longer available. Reconnect it first."; return }
         state.target = id; persistSelection(); server?.broadcast()
-    }
-    func toggleFavorite() {
-        if favorites.contains(where: { $0.id == state.place.id }) { favorites.removeAll { $0.id == state.place.id } }
-        else { favorites.insert(state.place, at: 0); favorites = Array(favorites.prefix(30)) }
-        if let d = try? JSONEncoder().encode(favorites) { UserDefaults.standard.set(d, forKey: "favorites") }
     }
     func command(_ message: WireMessage) async {
         if message.kind == "state" { return }

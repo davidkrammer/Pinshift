@@ -10,7 +10,7 @@ The Mac companion connection and Xcode's connection to the target phone are sepa
 
 Connect the unlocked phone by USB first, accept the Trust prompt on the phone, enable Developer Mode, and let Xcode prepare the device. For wireless operation, confirm that Xcode can reach that same phone over the network. Check `xcrun devicectl list devices` and `xcrun devicectl device simulate location --help`. Update/select a compatible full Xcode if the location command is missing.
 
-If multiple iPhones are connected, explicitly choose the target in Pinshift. A disappeared target is never silently replaced with another phone.
+If multiple iPhones are connected, choose the target in the companion's **Connection** sheet. A disappeared target is never silently replaced with another phone.
 
 ## Waiting to restore GPS
 
@@ -18,7 +18,7 @@ Reconnect and unlock the original target iPhone. Keep the Mac awake. The worker 
 
 ## Remove Pinshift
 
-First use **Stop & restore GPS** while the target iPhone is reachable and verify **Real GPS**. Quit the Mac app. Then unload its worker:
+First use **Stop** while the target iPhone is reachable and verify **Real GPS**. Choose **Quit Pinshift** from the Mac menu bar popover. Then unload its worker:
 
 ```sh
 launchctl bootout "gui/$(id -u)/at.strics.pinshift.keeper"

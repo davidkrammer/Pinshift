@@ -11,6 +11,7 @@
 		0736F0663D307C393474970E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B6EFDC012B7BE481F821EF /* Models.swift */; };
 		17E3C6C6A92E2C72A8AFACF7 /* PlaceMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4677D0A14E23A567C0B2E150 /* PlaceMap.swift */; };
 		1F8EEB11ACCE5F7EE14EB82C /* QRScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A508CB4F3B3AD624D8405A7 /* QRScanner.swift */; };
+		2AC9E48DE128FFA14D31CCE9 /* PlaceSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6031C7D59D4635AD401B8A89 /* PlaceSearch.swift */; };
 		2CCF283E3A31B2E7104A61DC /* HostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A67CFAA7251CD7B5F64DA8 /* HostModel.swift */; };
 		39A03E1B2C0699463BA189E7 /* LocalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B04A2ED17E60EC51BF7A4A5 /* LocalLink.swift */; };
 		3E734F56BD55DBB19885EF22 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B6EFDC012B7BE481F821EF /* Models.swift */; };
@@ -54,6 +55,7 @@
 		4677D0A14E23A567C0B2E150 /* PlaceMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMap.swift; sourceTree = "<group>"; };
 		51A814D45A5346CE0A7A1E14 /* PinshiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinshiftApp.swift; sourceTree = "<group>"; };
 		5AED60778B73155E6762F519 /* CoreDeviceInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDeviceInventory.swift; sourceTree = "<group>"; };
+		6031C7D59D4635AD401B8A89 /* PlaceSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceSearch.swift; sourceTree = "<group>"; };
 		629BFE7F0B2B1941846E9E27 /* RemoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteModel.swift; sourceTree = "<group>"; };
 		86A67CFAA7251CD7B5F64DA8 /* HostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostModel.swift; sourceTree = "<group>"; };
 		8D49CBBA8A9F67F24DC47135 /* HostServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostServer.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 			children = (
 				DEE9E1BA86B47EBB9DA8677F /* Info.plist */,
 				91478071F9C1A57EF597FB4B /* PinshiftRemoteApp.swift */,
+				6031C7D59D4635AD401B8A89 /* PlaceSearch.swift */,
 				3A508CB4F3B3AD624D8405A7 /* QRScanner.swift */,
 				629BFE7F0B2B1941846E9E27 /* RemoteModel.swift */,
 				FA191E738847CADE0329FD21 /* RemoteView.swift */,
@@ -301,6 +304,7 @@
 				0736F0663D307C393474970E /* Models.swift in Sources */,
 				7CEDC5F6D5B8002F13152FB8 /* PinshiftRemoteApp.swift in Sources */,
 				972AB359B7BE641C9F0C504D /* PlaceMap.swift in Sources */,
+				2AC9E48DE128FFA14D31CCE9 /* PlaceSearch.swift in Sources */,
 				1F8EEB11ACCE5F7EE14EB82C /* QRScanner.swift in Sources */,
 				B54F7AC659552D3CB90E6851 /* RemoteModel.swift in Sources */,
 				793574920F8F41C3033E7403 /* RemoteView.swift in Sources */,
@@ -366,7 +370,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = WGZZ8JM999;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -382,7 +386,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -513,7 +517,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = WGZZ8JM999;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -535,7 +539,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

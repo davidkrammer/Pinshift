@@ -10,6 +10,7 @@ import Combine
     @Published var connectionText = "Pair with your Mac to begin."
     @Published var error: String?
     @Published var pending = false
+    @Published private(set) var favorites: [Place] = []
     private var browser: NWBrowser?
     private var link: MessageConnection?
     private var endpoint: NWEndpoint?
@@ -18,8 +19,30 @@ import Combine
     private var pendingID: String?
     private var generation = UUID()
     init() {
+        if let data = UserDefaults.standard.data(forKey: "favoritePlaces"),
+           let saved = try? JSONDecoder().decode([Place].self, from: data) {
+            favorites = saved.filter { $0.isValid }
+        }
         if let d = SecureStore.load("remote"), let p = try? JSONDecoder().decode(Pairing.self, from: d) { pairing = p; browse() }
         timer = Timer.scheduledTimer(withTimeInterval: 4, repeats: true) { [weak self] _ in Task { @MainActor in self?.tick() } }
+    }
+    func toggleFavorite(_ place: Place) {
+        guard place.isValid, place.name != "Choose a location" else { return }
+        if favorites.contains(where: { $0.id == place.id }) {
+            favorites.removeAll { $0.id == place.id }
+        } else {
+            favorites.insert(place, at: 0)
+        }
+        saveFavorites()
+    }
+    func removeFavorites(at offsets: IndexSet) {
+        for index in offsets.sorted(by: >) { favorites.remove(at: index) }
+        saveFavorites()
+    }
+    private func saveFavorites() {
+        if let data = try? JSONEncoder().encode(favorites) {
+            UserDefaults.standard.set(data, forKey: "favoritePlaces")
+        }
     }
     func pair(_ code: String) {
         do {

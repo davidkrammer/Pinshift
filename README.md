@@ -8,23 +8,24 @@ Pinshift is a free, MIT-licensed fork of [GeoShift](https://github.com/Lemelson/
 - Start location simulation and restore real GPS with one button.
 - Control the Mac from an iPhone on the same local Wi-Fi network.
 - Pair using a private QR code; commands and status use authenticated, encrypted TLS.
-- Close the Mac window and keep controlling it through the menu bar and companion.
-- Save favorite places on the Mac. Select the exact target if multiple iPhones are connected.
+- Keep the Mac host in the menu bar, with no Dock icon or app window.
+- Use a native map and draggable control sheet on iPhone, with Start/Stop pinned at the bottom and saved favorites above.
+- Open Search and Connection in a smaller sheet. Select the exact target if multiple iPhones are connected.
 
 ## Get started
 
 1. Build and open **Pinshift** on your Mac.
 2. Connect the target iPhone to Xcode, trust the Mac, and enable Developer Mode on the phone. Set up Xcode's network connection if you want to unplug USB.
 3. Build and install the **PinshiftRemote** target on your iPhone.
-4. Keep both devices on the same Wi-Fi. On the Mac, click **Pair iPhone remote**; on the iPhone, tap **Scan Mac’s QR code**. Allow Local Network access when asked.
-5. Choose a location on the phone and tap **Start location**. Tap **Stop & restore GPS** when finished.
+4. Keep both devices on the same Wi-Fi. Click the location icon in the Mac menu bar to show the pairing code; on the iPhone, tap **Scan QR code**. Allow Local Network access when asked.
+5. Tap the map or use Search in the phone's bottom sheet, then tap **Start**. Tap **Stop** to restore real GPS. Tap the star to save a place; pull the sheet up to choose a favorite. Swipe a favorite left to delete it.
 
 The companion sends commands to the Mac. It does not simulate location on its own. The Mac must be awake, Pinshift must remain running, and Xcode must be able to reach the target iPhone. The location worker prevents idle sleep while active; closing a laptop lid still interrupts connectivity.
 
 ## Requirements
 
 - macOS 14 or later; iPhone companion requires iOS 18 or later.
-- Full Xcode with `devicectl device simulate location` support. Development was verified with Xcode 26.6 and a trusted iPhone running iOS 27. Check the command below before installing.
+- Full Xcode with `devicectl device simulate location` support. Version 1.1 was built and tested with Xcode 27.0, the iOS 26.5 simulator, and a trusted iPhone running iOS 27. Check the command below before installing.
 - A development signing team to install the companion on a physical iPhone. Apple controls the availability, limits, and validity of development provisioning.
 - A local network that permits Bonjour discovery and connections between devices. Guest networks with client isolation may prevent pairing.
 

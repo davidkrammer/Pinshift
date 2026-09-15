@@ -2,103 +2,294 @@ import SwiftUI
 
 struct RemoteView: View {
     @ObservedObject var model: RemoteModel
-    @State private var search = false
-    @State private var pairing = false
     @State private var draft: Place?
-    var selected: Place { draft ?? model.state.place }
+
+    private var selected: Place { draft ?? model.state.place }
+
     var body: some View {
         Group {
-            if model.pairing == nil { PairRemoteView(model: model) }
-            else {
-                ZStack(alignment: .top) {
-                    PlaceMap(place: selected) { draft = $0 }.ignoresSafeArea()
-                    HStack {
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text("Pinshift").font(.system(.title2, design: .rounded, weight: .bold))
-                            HStack(spacing: 5) { Circle().fill(model.connected ? Color.accentColor : .orange).frame(width: 6, height: 6); Text(model.connected ? model.state.hostName : "Mac disconnected").font(.caption).lineLimit(1) }
+            if model.pairing == nil {
+                PairRemoteView(model: model)
+            } else {
+                PlaceMap(place: selected) { draft = $0 }
+                    .ignoresSafeArea()
+                    .sheet(isPresented: .constant(true)) {
+                        RemoteControls(model: model, draft: $draft)
+                    }
+            }
+        }
+        .onChange(of: model.state.place) { _, place in
+            // Keep a pending selection until the Mac actually acknowledges it.
+            if draft?.id == place.id { draft = nil }
+        }
+        .onChange(of: model.pairing?.id) { _, _ in draft = nil }
+    }
+}
+
+private enum RemoteRoute: Hashable {
+    case search
+    case connection
+}
+
+private struct RemoteControls: View {
+    @ObservedObject var model: RemoteModel
+    @Binding var draft: Place?
+    @Environment(\.dynamicTypeSize) private var typeSize
+    @State private var path: [RemoteRoute] = []
+    @State private var detent = PresentationDetent.height(240)
+
+    private var selected: Place { draft ?? model.state.place }
+    private var hasDraft: Bool { draft != nil && draft?.id != model.state.place.id }
+    private var isFavorite: Bool { model.favorites.contains { $0.id == selected.id } }
+    private var canSend: Bool { model.connected && !model.pending }
+    private var canStart: Bool {
+        canSend && model.state.target != nil && selected.isValid && selected.name != "Choose a location"
+    }
+    private var status: String {
+        if !model.connected { return "Mac disconnected" }
+        if model.pending { return "Sending…" }
+        if hasDraft { return "Not applied" }
+        return model.state.title
+    }
+
+    var body: some View {
+        NavigationStack(path: $path) {
+            List {
+                Section {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack(alignment: .top, spacing: 12) {
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(selected.name).font(.headline)
+                                Text(status).font(.subheadline).foregroundStyle(.secondary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                            if model.pending {
+                                ProgressView().controlSize(.small)
+                            } else if hasDraft {
+                                Button("Discard selection", systemImage: "arrow.uturn.backward") { draft = nil }
+                                    .labelStyle(.iconOnly)
+                            }
+                            if selected.name != "Choose a location" {
+                                Button(isFavorite ? "Remove favorite" : "Save favorite", systemImage: isFavorite ? "star.fill" : "star") {
+                                    model.toggleFavorite(selected)
+                                }
+                                .labelStyle(.iconOnly)
+                                .buttonStyle(.borderless)
+                            }
                         }
-                        Spacer()
-                        Button { search = true } label: { Image(systemName: "magnifyingglass").font(.title3).frame(width: 44, height: 44) }.accessibilityLabel("Search places")
-                        Button { pairing = true } label: { Image(systemName: "desktopcomputer").font(.title3).frame(width: 44, height: 44) }.accessibilityLabel("Mac connection")
-                    }.padding(16).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 26)).padding(.horizontal, 16).padding(.top, 8)
+
+                        if !model.connected {
+                            Button("Reconnect", systemImage: "arrow.clockwise") { model.reconnect() }
+                        } else if model.state.target == nil {
+                            Text("Connect an iPhone to your Mac.").font(.footnote).foregroundStyle(.secondary)
+                        }
+
+                        if let error = model.error {
+                            Text(error).font(.footnote).foregroundStyle(.red)
+                        } else if model.state.phase == "clearPending" {
+                            Text("Reconnect the iPhone to restore GPS.").font(.footnote).foregroundStyle(.secondary)
+                        } else if model.state.phase == "failed" {
+                            Text(model.state.detail).font(.footnote).foregroundStyle(.red)
+                        }
+                    }
+                    .buttonStyle(.borderless)
+                    .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
                 }
-                .safeAreaInset(edge: .bottom, spacing: 0) {
-                    VStack(alignment: .leading, spacing: 13) {
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(selected.name).font(.title2.weight(.semibold)).lineLimit(2)
-                                Text(selected.coordinates).font(.system(.caption, design: .monospaced)).foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            if draft != nil { Button("Reset") { draft = nil }.font(.subheadline) }
+
+                if detent != .height(240) {
+                    Section("Favorites") {
+                        if model.favorites.isEmpty {
+                            Text("No favorites").foregroundStyle(.secondary)
                         }
-                        if model.state.devices.count > 1 {
-                            Picker("Target iPhone", selection: Binding(get: { model.state.target ?? "" }, set: { model.send("target", target: $0) })) { ForEach(model.state.devices) { Text($0.name).tag($0.id) } }.disabled(model.state.needsStop)
-                        }
-                        HStack(spacing: 6) { Circle().fill(model.state.active && model.connected ? Color.accentColor : .secondary).frame(width: 7, height: 7); Text(model.connected ? model.state.title : model.connectionText).font(.subheadline).foregroundStyle(.secondary).lineLimit(2) }
-                        if let error = model.error { Text(error).font(.caption).foregroundStyle(.red) }
-                        if model.state.phase == "clearPending" { Text("GPS will restore when the target iPhone reconnects to your Mac.").font(.caption).foregroundStyle(.secondary) }
-                        HStack(spacing: 10) {
-                            if draft != nil && model.state.needsStop {
-                                Button { model.send("start", place: selected); draft = nil } label: { Text("Move here").frame(maxWidth: .infinity).padding(.vertical, 9) }.buttonStyle(.borderedProminent)
-                            }
+                        ForEach(model.favorites) { place in
                             Button {
-                                model.send(model.state.needsStop ? "stop" : "start", place: model.state.needsStop ? nil : selected)
-                                if !model.state.needsStop { draft = nil }
+                                draft = place
+                                if !typeSize.isAccessibilitySize { detent = .height(240) }
                             } label: {
-                                HStack { if model.pending { ProgressView().controlSize(.small) } else { Image(systemName: model.state.needsStop ? "stop.fill" : "play.fill") }; Text(model.state.needsStop ? "Stop & restore GPS" : "Start location") }.frame(maxWidth: .infinity).padding(.vertical, 9)
-                            }.buttonStyle(.borderedProminent)
-                        }.controlSize(.large).disabled(!model.connected || model.pending || (!model.state.needsStop && model.state.target == nil))
-                    }.padding(22).background(.regularMaterial, in: UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28))
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(place.name).foregroundStyle(.primary)
+                                    Text(place.name == "Dropped pin" ? place.coordinates : place.detail)
+                                        .font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
+                                }
+                            }
+                        }
+                        .onDelete(perform: model.removeFavorites)
+                    }
+                }
+            }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                actionButtons
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(.bar)
+            }
+            .navigationTitle("Pinshift")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink(value: RemoteRoute.search) {
+                        Label("Search", systemImage: "magnifyingglass")
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(value: RemoteRoute.connection) {
+                        Label("Connection", systemImage: "desktopcomputer")
+                    }
+                }
+            }
+            .navigationDestination(for: RemoteRoute.self) { route in
+                switch route {
+                case .search:
+                    PlaceSearch(near: selected) { place in
+                        draft = place
+                        path.removeAll()
+                    }
+                case .connection:
+                    ConnectionView(model: model)
                 }
             }
         }
-        .tint(Color(red: 0.0, green: 0.52, blue: 0.46))
-        .sheet(isPresented: $search) { PlaceSearch { draft = $0 } }
-        .sheet(isPresented: $pairing) { ConnectionView(model: model) }
-        .onChange(of: model.state.place.id) { _, _ in if draft?.id == model.state.place.id { draft = nil } }
+        .presentationDetents(typeSize.isAccessibilitySize ? [.large] : [.height(240), .medium, .large], selection: $detent)
+        .presentationDragIndicator(.visible)
+        .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+        .presentationContentInteraction(.resizes)
+        .interactiveDismissDisabled()
+        .onChange(of: path) { _, path in
+            if typeSize.isAccessibilitySize { detent = .large }
+            else { detent = path.isEmpty ? .height(240) : .medium }
+        }
+        .onChange(of: typeSize, initial: true) { _, size in
+            if size.isAccessibilitySize { detent = .large }
+        }
+        .onChange(of: model.error) { _, error in
+            if error != nil && detent == .height(240) { detent = .medium }
+        }
+    }
+
+    private var actionButtons: some View {
+        HStack(spacing: 12) {
+            if model.state.needsStop {
+                if hasDraft {
+                    Button { model.send("start", place: selected) } label: {
+                        Label("Move here", systemImage: "location.fill").frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!canStart)
+                }
+                Button { model.send("stop") } label: {
+                    Label("Stop", systemImage: "stop.fill").frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .disabled(!canSend)
+                .accessibilityHint("Restore the iPhone’s real GPS location")
+            } else {
+                Button { model.send("start", place: selected) } label: {
+                    Label("Start", systemImage: "play.fill").frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!canStart)
+            }
+        }
+        .controlSize(.large)
     }
 }
+
 struct PairRemoteView: View {
     @ObservedObject var model: RemoteModel
     @State private var scan = false
-    @State private var code = ""
+
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 26) {
-                    Image("Brand").resizable().frame(width: 116, height: 116).clipShape(RoundedRectangle(cornerRadius: 27)).padding(.top, 45)
-                    VStack(spacing: 12) { Text("A change of place.").font(.system(size: 34, weight: .bold, design: .rounded)); Text("Choose a location on your iPhone.\nYour Mac takes it from there.").font(.title3).foregroundStyle(.secondary).multilineTextAlignment(.center) }
-                    VStack(alignment: .leading, spacing: 18) {
-                        Label("Open Pinshift on your Mac", systemImage: "desktopcomputer")
-                        Label("Connect to the same Wi-Fi", systemImage: "wifi")
-                        Label("Click Pair iPhone remote", systemImage: "qrcode")
-                    }.frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 12)
-                    Button { scan = true } label: { Label("Scan Mac’s QR code", systemImage: "qrcode.viewfinder").frame(maxWidth: .infinity).padding(.vertical, 9) }.buttonStyle(.borderedProminent).controlSize(.large)
-                    DisclosureGroup("Enter pairing code instead") {
-                        TextField("Paste the code from your Mac", text: $code, axis: .vertical).textInputAutocapitalization(.never).autocorrectionDisabled().textFieldStyle(.roundedBorder).padding(.top, 12)
-                        Button("Connect") { model.pair(code) }.buttonStyle(.bordered).disabled(code.isEmpty)
-                    }.font(.subheadline).foregroundStyle(.secondary)
-                    if let error = model.error { Text(error).font(.callout).foregroundStyle(.red) }
-                    Text("Private, encrypted, and only on your local network.").font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center)
-                }.padding(28)
-            }.navigationTitle("Pinshift").navigationBarTitleDisplayMode(.inline)
-        }.sheet(isPresented: $scan) { QRScanner { model.pair($0); scan = false } }
+            Form {
+                Section {
+                    Button("Scan QR code", systemImage: "qrcode.viewfinder") { scan = true }
+                    NavigationLink("Enter pairing code") { PairingCodeView(model: model) }
+                } footer: {
+                    Text("Open Pinshift in your Mac’s menu bar. Use the same Wi-Fi.")
+                }
+                if let error = model.error {
+                    Section { Text(error).foregroundStyle(.red) }
+                }
+            }
+            .navigationTitle("Connect Mac")
+            .sheet(isPresented: $scan) {
+                QRScanner { model.pair($0); scan = false }
+            }
+        }
     }
 }
+
+private struct PairingCodeView: View {
+    @ObservedObject var model: RemoteModel
+    @State private var code = ""
+
+    var body: some View {
+        Form {
+            Section {
+                TextField("Pairing code", text: $code, axis: .vertical)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+            }
+            Section {
+                Button("Connect") { model.pair(code) }
+                    .disabled(code.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+            if let error = model.error {
+                Section { Text(error).foregroundStyle(.red) }
+            }
+        }
+        .navigationTitle("Pairing code")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
 struct ConnectionView: View {
     @ObservedObject var model: RemoteModel
-    @Environment(\.dismiss) var dismiss
     @State private var forget = false
+
+    private var targetName: String {
+        model.state.devices.first(where: { $0.id == model.state.target })?.name ?? "Not connected"
+    }
+
     var body: some View {
-        NavigationStack {
-            List {
-                Section("Mac") { Label(model.pairing?.name ?? "No Mac", systemImage: "desktopcomputer"); Text(model.connectionText).font(.subheadline).foregroundStyle(.secondary); Button("Reconnect") { model.reconnect() } }
-                Section { Text("Keep Pinshift running on your Mac. Closing its window keeps the menu bar controller available. The Mac must stay awake and connected to the same Wi-Fi.").foregroundStyle(.secondary) }
-                Section { Button("Forget this Mac", role: .destructive) { forget = true } }
-            }.navigationTitle("Connection").navigationBarTitleDisplayMode(.inline)
-                .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
-                .confirmationDialog("Forget this Mac?", isPresented: $forget) { Button("Forget Mac", role: .destructive) { model.forget(); dismiss() } }
+        Form {
+            Section {
+                LabeledContent("Mac", value: model.pairing?.name ?? "Not paired")
+                LabeledContent("Status", value: model.connected ? "Connected" : "Disconnected")
+                Button("Reconnect", systemImage: "arrow.clockwise") { model.reconnect() }
+            }
+
+            Section {
+                if model.state.devices.count > 1 {
+                    Picker("iPhone", selection: Binding(
+                        get: { model.state.target ?? "" },
+                        set: { model.send("target", target: $0) }
+                    )) {
+                        if model.state.target == nil { Text("Choose iPhone").tag("") }
+                        if let id = model.state.target, !model.state.devices.contains(where: { $0.id == id }) {
+                            Text("Disconnected iPhone").tag(id)
+                        }
+                        ForEach(model.state.devices) { Text($0.name).tag($0.id) }
+                    }
+                    .disabled(model.state.needsStop || model.pending || !model.connected)
+                } else {
+                    LabeledContent("iPhone", value: targetName)
+                }
+            }
+
+            Section {
+                Button("Forget Mac", role: .destructive) { forget = true }
+            }
+        }
+        .navigationTitle("Connection")
+        .navigationBarTitleDisplayMode(.inline)
+        .confirmationDialog("Forget this Mac?", isPresented: $forget) {
+            Button("Forget Mac", role: .destructive) { model.forget() }
         }
     }
 }

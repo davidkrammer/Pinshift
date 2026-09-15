@@ -1,6 +1,8 @@
 # Pinshift design
 
-The interface uses a single map, a clear selected place, connection status, and one primary Start/Stop action. macOS keeps device selection and favorite places in a plain sidebar. iPhone puts search and connection at the top, with location and controls within thumb reach. All application strings are English; map labels and proper place names come from MapKit.
+The Mac is a menu bar accessory with a small native pairing popover and no Dock icon or main window. The iPhone uses a full-screen MapKit map with its standard marker and a draggable SwiftUI sheet. Start/Stop stays at the bottom while pulling up the native list reveals favorites. Search and Connection use the same navigation stack at medium sheet height. System colors, fonts, controls, and accessibility sizing replace custom cards and overlays. All application strings are English; map labels and proper place names come from MapKit.
+
+Search results use primary text for place names and coordinates, secondary text for concise addresses, and neutral SF Symbols. Repeated address components and duplicate results are removed. MapKit searches use the selected map area as a relevance hint while still accepting worldwide place names and coordinates.
 
 The generated logo source is [App/Resources/Logo.png](../App/Resources/Logo.png). The Xcode asset catalog contains the Mac and iPhone icons derived from it.
 

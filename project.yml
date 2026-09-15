@@ -9,8 +9,8 @@ settings:
   base:
     SWIFT_VERSION: '5.0'
     DEVELOPMENT_TEAM: WGZZ8JM999
-    MARKETING_VERSION: '1.0.0'
-    CURRENT_PROJECT_VERSION: '1'
+    MARKETING_VERSION: '1.1.0'
+    CURRENT_PROJECT_VERSION: '2'
     CODE_SIGN_STYLE: Automatic
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -34,6 +34,7 @@ targets:
         CFBundleLocalizations: [en]
         NSLocalNetworkUsageDescription: Pinshift connects to your paired iPhone remote on the local network.
         NSBonjourServices: ['_pinshift._tcp']
+        LSUIElement: true
         LSApplicationCategoryType: public.app-category.developer-tools
         NSHumanReadableCopyright: 'Copyright © 2026 STRICS. Based on GeoShift by Lemelson.'
     settings:
