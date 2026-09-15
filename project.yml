@@ -70,6 +70,8 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: at.strics.PinshiftRemote
+        MARKETING_VERSION: '1.1.1'
+        CURRENT_PROJECT_VERSION: '3'
         TARGETED_DEVICE_FAMILY: '1'
   PinshiftTests:
     type: bundle.unit-test

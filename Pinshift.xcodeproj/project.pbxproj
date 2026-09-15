@@ -16,6 +16,7 @@
 		39A03E1B2C0699463BA189E7 /* LocalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B04A2ED17E60EC51BF7A4A5 /* LocalLink.swift */; };
 		3E734F56BD55DBB19885EF22 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36B6EFDC012B7BE481F821EF /* Models.swift */; };
 		420749CB4E32985D1EF8F5EA /* AppLivenessLease.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDB3173722D46904B9EE951 /* AppLivenessLease.swift */; };
+		4BCF2B9E224DA98CEAF6DDD6 /* LocationControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60168A06CA30FCCF9F6F4D52 /* LocationControls.swift */; };
 		6714B8B749A1FFA00FFA784D /* SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7786F7D9E95B028C03D4E3 /* SecureStore.swift */; };
 		6BAEB8F98EB44FAF191C1225 /* CoreDeviceInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AED60778B73155E6762F519 /* CoreDeviceInventory.swift */; };
 		793574920F8F41C3033E7403 /* RemoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA191E738847CADE0329FD21 /* RemoteView.swift */; };
@@ -26,11 +27,13 @@
 		B54F7AC659552D3CB90E6851 /* RemoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 629BFE7F0B2B1941846E9E27 /* RemoteModel.swift */; };
 		BFF2E746ACB29116BAE98105 /* PinshiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A814D45A5346CE0A7A1E14 /* PinshiftApp.swift */; };
 		C20149660BBA57224911976B /* HostServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D49CBBA8A9F67F24DC47135 /* HostServer.swift */; };
+		C3F5B1D5DE452665B78709DB /* LocationControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60168A06CA30FCCF9F6F4D52 /* LocationControls.swift */; };
 		D980F918CFFF63B15F868527 /* LinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A36151EF4B167AE4F00AB2 /* LinkTests.swift */; };
 		E4BBEC85F40C456C39169EEA /* LocalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B04A2ED17E60EC51BF7A4A5 /* LocalLink.swift */; };
 		EDD03F09C004EF58B48C5CFC /* HostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01705B986E467EC681BAB33 /* HostView.swift */; };
 		EDEF86DDDDED0206285047B5 /* DiscoveryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394A56B162D5A6AA6D4ADBEC /* DiscoveryTests.swift */; };
 		F4A5A4CA43923E86933B68B7 /* keeper.py in Resources */ = {isa = PBXBuildFile; fileRef = ECE862D2CE452F40C81F01B6 /* keeper.py */; };
+		F9AEDEEE3492BE1B5C062002 /* LocationControlsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F0DC7ED133C3C1238191B30 /* LocationControlsTests.swift */; };
 		FA6ECDF568D492A8A86785CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5A2EE3E55DAD98248FAA085 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F0DC7ED133C3C1238191B30 /* LocationControlsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationControlsTests.swift; sourceTree = "<group>"; };
 		1B04A2ED17E60EC51BF7A4A5 /* LocalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalLink.swift; sourceTree = "<group>"; };
 		1BEF6C45ADAEA560937FB9C0 /* Pinshift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pinshift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36B6EFDC012B7BE481F821EF /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -55,6 +59,7 @@
 		4677D0A14E23A567C0B2E150 /* PlaceMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMap.swift; sourceTree = "<group>"; };
 		51A814D45A5346CE0A7A1E14 /* PinshiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinshiftApp.swift; sourceTree = "<group>"; };
 		5AED60778B73155E6762F519 /* CoreDeviceInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDeviceInventory.swift; sourceTree = "<group>"; };
+		60168A06CA30FCCF9F6F4D52 /* LocationControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationControls.swift; sourceTree = "<group>"; };
 		6031C7D59D4635AD401B8A89 /* PlaceSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceSearch.swift; sourceTree = "<group>"; };
 		629BFE7F0B2B1941846E9E27 /* RemoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteModel.swift; sourceTree = "<group>"; };
 		86A67CFAA7251CD7B5F64DA8 /* HostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostModel.swift; sourceTree = "<group>"; };
@@ -119,6 +124,7 @@
 			children = (
 				394A56B162D5A6AA6D4ADBEC /* DiscoveryTests.swift */,
 				E2A36151EF4B167AE4F00AB2 /* LinkTests.swift */,
+				0F0DC7ED133C3C1238191B30 /* LocationControlsTests.swift */,
 				CE4057193DFF7621DBC25A89 /* ProtocolTests.swift */,
 			);
 			name = PinshiftTests;
@@ -129,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				1B04A2ED17E60EC51BF7A4A5 /* LocalLink.swift */,
+				60168A06CA30FCCF9F6F4D52 /* LocationControls.swift */,
 				36B6EFDC012B7BE481F821EF /* Models.swift */,
 				4677D0A14E23A567C0B2E150 /* PlaceMap.swift */,
 				AA7786F7D9E95B028C03D4E3 /* SecureStore.swift */,
@@ -289,6 +296,7 @@
 				C20149660BBA57224911976B /* HostServer.swift in Sources */,
 				EDD03F09C004EF58B48C5CFC /* HostView.swift in Sources */,
 				E4BBEC85F40C456C39169EEA /* LocalLink.swift in Sources */,
+				4BCF2B9E224DA98CEAF6DDD6 /* LocationControls.swift in Sources */,
 				3E734F56BD55DBB19885EF22 /* Models.swift in Sources */,
 				BFF2E746ACB29116BAE98105 /* PinshiftApp.swift in Sources */,
 				17E3C6C6A92E2C72A8AFACF7 /* PlaceMap.swift in Sources */,
@@ -301,6 +309,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				39A03E1B2C0699463BA189E7 /* LocalLink.swift in Sources */,
+				C3F5B1D5DE452665B78709DB /* LocationControls.swift in Sources */,
 				0736F0663D307C393474970E /* Models.swift in Sources */,
 				7CEDC5F6D5B8002F13152FB8 /* PinshiftRemoteApp.swift in Sources */,
 				972AB359B7BE641C9F0C504D /* PlaceMap.swift in Sources */,
@@ -318,6 +327,7 @@
 			files = (
 				EDEF86DDDDED0206285047B5 /* DiscoveryTests.swift in Sources */,
 				D980F918CFFF63B15F868527 /* LinkTests.swift in Sources */,
+				F9AEDEEE3492BE1B5C062002 /* LocationControlsTests.swift in Sources */,
 				05163C402E259DD68CC580A7 /* ProtocolTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,11 +412,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 3;
 				INFOPLIST_FILE = App/iOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = at.strics.PinshiftRemote;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -418,11 +430,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 3;
 				INFOPLIST_FILE = App/iOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = at.strics.PinshiftRemote;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;

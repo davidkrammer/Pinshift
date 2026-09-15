@@ -9,14 +9,16 @@ import Combine
     @Published var connecting = false
     @Published var connectionText = "Pair with your Mac to begin."
     @Published var error: String?
-    @Published var pending = false
+    @Published private(set) var pendingCommand: WireMessage?
     @Published private(set) var favorites: [Place] = []
+    var pending: Bool { pendingCommand != nil }
+    var readyForCommands: Bool { connected && link != nil && Date().timeIntervalSince(lastState) < 12 }
     private var browser: NWBrowser?
     private var link: MessageConnection?
     private var endpoint: NWEndpoint?
     private var timer: Timer?
     private var lastState = Date.distantPast
-    private var pendingID: String?
+    private var pendingTimeout: Task<Void, Never>?
     private var generation = UUID()
     init() {
         if let data = UserDefaults.standard.data(forKey: "favoritePlaces"),
@@ -54,16 +56,29 @@ import Combine
     func forget() { disconnect(); SecureStore.remove("remote"); pairing = nil; connectionText = "Pair with your Mac to begin."; error = nil }
     func reconnect() { guard pairing != nil else { return }; disconnect(); browse() }
     func send(_ kind: String, place: Place? = nil, target: String? = nil) {
-        guard connected, !pending, Date().timeIntervalSince(lastState) < 12 else { error = "The Mac is unavailable. Reconnect before making changes."; return }
+        guard !pending else { return }
+        guard readyForCommands, let link else { error = "The Mac is unavailable. Reconnect before making changes."; return }
+        let controls = LocationControls(state: state, pendingCommand: nil, connected: true, place: place ?? state.place)
+        if kind == "start" {
+            guard (controls.action == .start && controls.enabled) || controls.canMove else { return }
+        } else if kind == "stop" {
+            guard controls.action == .stop && controls.enabled else { return }
+        }
         let message = WireMessage(kind: kind, place: place, target: target)
-        error = nil; pending = true; pendingID = message.id; link?.send(message)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 15) { [weak self] in
-            guard let self, self.pendingID == message.id else { return }
-            self.pending = false; self.pendingID = nil; self.error = "The Mac did not confirm the change. Check its status before retrying."
+        error = nil; pendingCommand = message; link.send(message)
+        pendingTimeout = Task { [weak self] in
+            do { try await Task.sleep(for: .seconds(15)) } catch { return }
+            guard let self, self.pendingCommand?.id == message.id else { return }
+            // Re-read the host before enabling another command; never replay it.
+            self.reconnect()
+            self.error = "The Mac did not confirm the change. Checking its status…"
         }
     }
+    private func clearPendingCommand() {
+        pendingTimeout?.cancel(); pendingTimeout = nil; pendingCommand = nil
+    }
     private func disconnect() {
-        generation = UUID(); browser?.cancel(); browser = nil; link?.onState = nil; link?.cancel(); link = nil; endpoint = nil; connected = false; connecting = false; pending = false; pendingID = nil
+        generation = UUID(); browser?.cancel(); browser = nil; link?.onState = nil; link?.cancel(); link = nil; endpoint = nil; connected = false; connecting = false; clearPendingCommand()
     }
     private func browse() {
         guard let pairing else { return }
@@ -73,7 +88,8 @@ import Combine
         let b = NWBrowser(for: .bonjour(type: LocalTLS.service, domain: "local."), using: p)
         b.stateUpdateHandler = { [weak self] s in
             Task { @MainActor in
-                if case .failed = s { self?.connectionText = "Allow Local Network access in Settings, then reconnect."; self?.connecting = false }
+                guard let self, self.generation == g else { return }
+                if case .failed = s { self.connectionText = "Allow Local Network access in Settings, then reconnect."; self.connecting = false }
             }
         }
         b.browseResultsChangedHandler = { [weak self] results, _ in
@@ -95,19 +111,22 @@ import Combine
             guard let self, self.generation == g, self.link === l else { return }
             self.connecting = !ready; self.connected = false
             if ready { l?.send(WireMessage(kind: "state")) }
-            else { self.connectionText = "Mac disconnected. Reconnecting…"; self.pending = false; self.link = nil; if let error { self.connectionText = error } }
+            else { self.connectionText = "Mac disconnected. Reconnecting…"; self.clearPendingCommand(); self.link = nil; if let error { self.connectionText = error } }
         }
         l.onMessage = { [weak self, weak l] message in
             guard let self, self.generation == g, self.link === l else { return }
             if let s = message.snapshot { self.state = s; self.connected = true; self.connecting = false; self.lastState = Date(); self.connectionText = "Connected to \(s.hostName)" }
-            if message.id == self.pendingID { self.pending = false; self.pendingID = nil }
+            if message.id == self.pendingCommand?.id { self.clearPendingCommand() }
             if let error = message.error { self.error = error }
         }
         l.start()
     }
     private func tick() {
         if connected {
-            if Date().timeIntervalSince(lastState) > 12 { connected = false; connectionText = "Mac connection lost."; link?.cancel(); link = nil }
+            if Date().timeIntervalSince(lastState) > 12 {
+                connected = false; connectionText = "Mac connection lost."
+                link?.onState = nil; link?.cancel(); link = nil; clearPendingCommand()
+            }
             else { link?.send(WireMessage(kind: "state")) }
         } else if link == nil, let endpoint { connect(endpoint) }
     }

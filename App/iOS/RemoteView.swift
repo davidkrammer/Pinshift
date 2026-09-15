@@ -41,92 +41,99 @@ private struct RemoteControls: View {
     private var selected: Place { draft ?? model.state.place }
     private var hasDraft: Bool { draft != nil && draft?.id != model.state.place.id }
     private var isFavorite: Bool { model.favorites.contains { $0.id == selected.id } }
-    private var canSend: Bool { model.connected && !model.pending }
-    private var canStart: Bool {
-        canSend && model.state.target != nil && selected.isValid && selected.name != "Choose a location"
+    private var controls: LocationControls {
+        LocationControls(state: model.state, pendingCommand: model.pendingCommand?.kind, connected: model.readyForCommands, place: selected)
     }
     private var status: String {
         if !model.connected { return "Mac disconnected" }
+        if model.pendingCommand?.kind == "start" { return "Starting…" }
+        if model.pendingCommand?.kind == "stop" { return "Restoring GPS…" }
+        if model.state.phase == "clearing" || model.state.phase == "clearPending" { return model.state.title }
         if model.pending { return "Sending…" }
         if hasDraft { return "Not applied" }
+        if model.state.phase == "applying" { return "Applying location…" }
         return model.state.title
     }
 
     var body: some View {
         NavigationStack(path: $path) {
-            List {
-                Section {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack(alignment: .top, spacing: 12) {
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text(selected.name).font(.headline)
-                                Text(status).font(.subheadline).foregroundStyle(.secondary)
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(spacing: 0) {
+                List {
+                    Section {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack(alignment: .top, spacing: 12) {
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(selected.name).font(.headline)
+                                    Text(status).font(.subheadline).foregroundStyle(.secondary)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
 
-                            if model.pending {
-                                ProgressView().controlSize(.small)
-                            } else if hasDraft {
-                                Button("Discard selection", systemImage: "arrow.uturn.backward") { draft = nil }
+                                if hasDraft && !model.pending {
+                                    Button("Discard selection", systemImage: "arrow.uturn.backward") { draft = nil }
+                                        .labelStyle(.iconOnly)
+                                }
+                                if selected.name != "Choose a location" {
+                                    Button(isFavorite ? "Remove favorite" : "Save favorite", systemImage: isFavorite ? "star.fill" : "star") {
+                                        model.toggleFavorite(selected)
+                                    }
                                     .labelStyle(.iconOnly)
-                            }
-                            if selected.name != "Choose a location" {
-                                Button(isFavorite ? "Remove favorite" : "Save favorite", systemImage: isFavorite ? "star.fill" : "star") {
-                                    model.toggleFavorite(selected)
-                                }
-                                .labelStyle(.iconOnly)
-                                .buttonStyle(.borderless)
-                            }
-                        }
-
-                        if !model.connected {
-                            Button("Reconnect", systemImage: "arrow.clockwise") { model.reconnect() }
-                        } else if model.state.target == nil {
-                            Text("Connect an iPhone to your Mac.").font(.footnote).foregroundStyle(.secondary)
-                        }
-
-                        if let error = model.error {
-                            Text(error).font(.footnote).foregroundStyle(.red)
-                        } else if model.state.phase == "clearPending" {
-                            Text("Reconnect the iPhone to restore GPS.").font(.footnote).foregroundStyle(.secondary)
-                        } else if model.state.phase == "failed" {
-                            Text(model.state.detail).font(.footnote).foregroundStyle(.red)
-                        }
-                    }
-                    .buttonStyle(.borderless)
-                    .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                }
-
-                if detent != .height(240) {
-                    Section("Favorites") {
-                        if model.favorites.isEmpty {
-                            Text("No favorites").foregroundStyle(.secondary)
-                        }
-                        ForEach(model.favorites) { place in
-                            Button {
-                                draft = place
-                                if !typeSize.isAccessibilitySize { detent = .height(240) }
-                            } label: {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(place.name).foregroundStyle(.primary)
-                                    Text(place.name == "Dropped pin" ? place.coordinates : place.detail)
-                                        .font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
+                                    .buttonStyle(.borderless)
                                 }
                             }
+
+                            if hasDraft && model.state.needsStop {
+                                Button("Move here", systemImage: "location.fill") {
+                                    model.send("start", place: selected)
+                                }
+                                .disabled(!controls.canMove)
+                            }
+
+                            if !model.connected {
+                                Button("Reconnect", systemImage: "arrow.clockwise") { model.reconnect() }
+                            } else if model.state.target == nil {
+                                Text("Connect an iPhone to your Mac.").font(.footnote).foregroundStyle(.secondary)
+                            }
+
+                            if let error = model.error {
+                                Text(error).font(.footnote).foregroundStyle(.red)
+                            } else if model.state.phase == "clearPending" {
+                                Text("Reconnect the iPhone to restore GPS.").font(.footnote).foregroundStyle(.secondary)
+                            } else if model.state.phase == "failed" {
+                                Text(model.state.detail).font(.footnote).foregroundStyle(.red)
+                            }
                         }
-                        .onDelete(perform: model.removeFavorites)
+                        .buttonStyle(.borderless)
+                        .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                    }
+
+                    if detent != .height(240) {
+                        Section("Favorites") {
+                            if model.favorites.isEmpty {
+                                Text("No favorites").foregroundStyle(.secondary)
+                            }
+                            ForEach(model.favorites) { place in
+                                Button {
+                                    draft = place
+                                    if !typeSize.isAccessibilitySize { detent = .height(240) }
+                                } label: {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(place.name).foregroundStyle(.primary)
+                                        Text(place.name == "Dropped pin" ? place.coordinates : place.detail)
+                                            .font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
+                                    }
+                                }
+                            }
+                            .onDelete(perform: model.removeFavorites)
+                        }
                     }
                 }
-            }
-            .listStyle(.plain)
-            .scrollContentBackground(.hidden)
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                actionButtons
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+                actionButton
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
-                    .background(.bar)
             }
             .navigationTitle("Pinshift")
             .navigationBarTitleDisplayMode(.inline)
@@ -171,31 +178,28 @@ private struct RemoteControls: View {
         }
     }
 
-    private var actionButtons: some View {
-        HStack(spacing: 12) {
-            if model.state.needsStop {
-                if hasDraft {
-                    Button { model.send("start", place: selected) } label: {
-                        Label("Move here", systemImage: "location.fill").frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(!canStart)
-                }
-                Button { model.send("stop") } label: {
-                    Label("Stop", systemImage: "stop.fill").frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-                .disabled(!canSend)
-                .accessibilityHint("Restore the iPhone’s real GPS location")
-            } else {
-                Button { model.send("start", place: selected) } label: {
-                    Label("Start", systemImage: "play.fill").frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(!canStart)
+    @ViewBuilder private var actionButton: some View {
+        if controls.busy {
+            HStack(spacing: 8) {
+                ProgressView().controlSize(.small)
+                Text(controls.title)
             }
+            .foregroundStyle(.primary)
+            .frame(maxWidth: .infinity, minHeight: 52)
+            .accessibilityElement(children: .combine)
+        } else {
+            Button(role: controls.action == .stop ? .destructive : nil) {
+                model.send(controls.action.rawValue, place: controls.action == .start ? selected : nil)
+            } label: {
+                Label(controls.title, systemImage: controls.action == .stop ? "stop.fill" : "play.fill")
+                    .frame(maxWidth: .infinity, minHeight: 24)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .frame(minHeight: 52)
+            .disabled(!controls.enabled)
+            .accessibilityHint(controls.action == .stop ? "Restore the iPhone’s real GPS location" : "Apply the selected location")
         }
-        .controlSize(.large)
     }
 }
 
