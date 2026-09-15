@@ -30,6 +30,8 @@ targets:
       path: App/Mac/Info.plist
       properties:
         CFBundleDisplayName: Pinshift
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDevelopmentRegion: en
         CFBundleLocalizations: [en]
         NSLocalNetworkUsageDescription: Pinshift connects to your paired iPhone remote on the local network.
@@ -53,6 +55,8 @@ targets:
       path: App/iOS/Info.plist
       properties:
         CFBundleDisplayName: Pinshift
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CFBundleDevelopmentRegion: en
         CFBundleLocalizations: [en]
         NSLocalNetworkUsageDescription: Pinshift finds and controls your paired Mac on the same Wi-Fi network.
