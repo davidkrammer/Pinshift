@@ -108,25 +108,23 @@ private struct RemoteControls: View {
                         .listRowBackground(Color.clear)
                     }
 
-                    if detent != .height(240) {
-                        Section("Favorites") {
-                            if model.favorites.isEmpty {
-                                Text("No favorites").foregroundStyle(.secondary)
-                            }
-                            ForEach(model.favorites) { place in
-                                Button {
-                                    draft = place
-                                    if !typeSize.isAccessibilitySize { detent = .height(240) }
-                                } label: {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(place.name).foregroundStyle(.primary)
-                                        Text(place.name == "Dropped pin" ? place.coordinates : place.detail)
-                                            .font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
-                                    }
+                    Section("Favorites") {
+                        if model.favorites.isEmpty {
+                            Text("No favorites").foregroundStyle(.secondary)
+                        }
+                        ForEach(model.favorites) { place in
+                            Button {
+                                draft = place
+                                if !typeSize.isAccessibilitySize { detent = .height(240) }
+                            } label: {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(place.name).foregroundStyle(.primary)
+                                    Text(place.name == "Dropped pin" ? place.coordinates : place.detail)
+                                        .font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
                                 }
                             }
-                            .onDelete(perform: model.removeFavorites)
                         }
+                        .onDelete(perform: model.removeFavorites)
                     }
                 }
                 .listStyle(.plain)
@@ -135,16 +133,17 @@ private struct RemoteControls: View {
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .navigationTitle("Pinshift")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink(value: RemoteRoute.search) {
+                    Button { open(.search) } label: {
                         Label("Search", systemImage: "magnifyingglass")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(value: RemoteRoute.connection) {
+                    Button { open(.connection) } label: {
                         Label("Connection", systemImage: "desktopcomputer")
                     }
                 }
@@ -161,20 +160,29 @@ private struct RemoteControls: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .presentationDetents(typeSize.isAccessibilitySize ? [.large] : [.height(240), .medium, .large], selection: $detent)
         .presentationDragIndicator(.visible)
         .presentationBackgroundInteraction(.enabled(upThrough: .medium))
         .presentationContentInteraction(.resizes)
         .interactiveDismissDisabled()
-        .onChange(of: path) { _, path in
-            if typeSize.isAccessibilitySize { detent = .large }
-            else { detent = path.isEmpty ? .height(240) : .medium }
-        }
         .onChange(of: typeSize, initial: true) { _, size in
             if size.isAccessibilitySize { detent = .large }
         }
         .onChange(of: model.error) { _, error in
             if error != nil && detent == .height(240) { detent = .medium }
+        }
+    }
+
+    private func open(_ route: RemoteRoute) {
+        // A navigation snapshot keeps its original height during a sheet resize.
+        // Lay out the destination at its final size in one update; keep that
+        // height on Back so the native pop transition never races a resize.
+        var transaction = Transaction(animation: nil)
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            detent = typeSize.isAccessibilitySize ? .large : .medium
+            path = [route]
         }
     }
 
@@ -290,6 +298,7 @@ struct ConnectionView: View {
                 Button("Forget Mac", role: .destructive) { forget = true }
             }
         }
+        .scrollContentBackground(.hidden)
         .navigationTitle("Connection")
         .navigationBarTitleDisplayMode(.inline)
         .confirmationDialog("Forget this Mac?", isPresented: $forget) {

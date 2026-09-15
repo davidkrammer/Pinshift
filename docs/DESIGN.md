@@ -4,6 +4,8 @@ The Mac is a menu bar accessory with a small native pairing popover and no Dock 
 
 Search results use primary text for place names and coordinates, secondary text for concise addresses, and neutral SF Symbols. Repeated address components and duplicate results are removed. MapKit searches use the selected map area as a relevance hint while still accepting worldwide place names and coordinates.
 
+Opening Search or Connection updates the sheet height and destination together without a competing navigation animation. Back preserves the current height, so the native pop transition keeps both screens fully laid out. Favorites stay in the scrolling list at every height, and all screens use the sheet's own background.
+
 The generated logo source is [App/Resources/Logo.png](../App/Resources/Logo.png). The Xcode asset catalog contains the Mac and iPhone icons derived from it.
 
 ## Image generation prompt

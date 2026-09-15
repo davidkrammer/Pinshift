@@ -35,6 +35,7 @@ struct PlaceSearch: View {
                 .foregroundStyle(.primary)
             }
         }
+        .scrollContentBackground(.hidden)
         .overlay {
             if busy {
                 ProgressView()
